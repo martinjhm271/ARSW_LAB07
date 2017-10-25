@@ -4,10 +4,10 @@
 
 
 **IMPORTANTE**
-* Se puede consultar en la Web: APIs/Documentación del lenguaje, y enunciados de los laboratorios (se pueden revisar los fuentes incluidos con los dichos enunciados).
+* Se puede consultar en la Web: APIs/Documentación de lenguaje y frameworls (Spring, HTML5, JS, etc), y enunciados de los laboratorios (se pueden revisar los fuentes incluidos con los dichos enunciados).
 * No se permite: Usar memorias USB, acceder a redes sociales, clientes de correo, o sistemas de almacenamiento en la nube (Google Drive, DropBox, etc). El uso de éstos implicará anulación.
 * Clone el proyecto con GIT, NO lo descargue directamente.
-* No modifique los identificadores de los componentes HTML, ni las etiquetas de los botones, o la estructura de paquetes, ya que puede le afectar el resultado del proceso _batch_ de evaluación.
+* NO modifique los identificadores de los componentes HTML, las etiquetas de los botones existentes, o la estructura de paquetes, ya que puede le afectar el resultado del proceso _batch_ de evaluación.
 
 
 ## Ahorcado  multijugador
@@ -16,8 +16,8 @@ Este repositorio tiene una versión incompleta de una variante del popular juego
 
 * Una partida se puede realizar simultáneamente entre varios jugadores, y el sistema permite realizar varias partidas simultáneamente. Es decir, una vez asociados a una partida, todos los jugadores pueden solicitar 'descubrir' si la palabra tiene una determinada letra, e intentar adivinar la palabra. Por ejemplo, es posible que inmediatamente después de que un jugador acierte con una letra faltante, el otro adivine la palabra.
 * Por ahora, el juego no se pierde al alcanzar un número máximo de intentos, sino sencillamente gana el primero que adivine la palabra.
-* Por ahora, no se tendrá la funcionalidad de 'creación de partidas', por lo que se deberá jugar en alguna de las partidas ya existentes (#1, #2, #3 y #4).
-* El hecho de que la palabra completa aparezca en la pantalla (al haber ingresado todas sus letras) NO SIGNFICA QUE YA SE HAYA GANADO. En ese caso, las reglas son las mismas, y sólo puede ganar el que escriba y envíe más rápidamente la palabra completa (de nuevo, así la misma ya haya sido descubierta).
+* Por ahora, no se tendrá la funcionalidad de 'creación de partidas', por lo que se deberá jugar en alguna de las partidas ya existentes.
+* El hecho de que un jugador adivine la última palabra faltante en la palabra NO SIGNFICA QUE YA HAYA GANADO. En ese caso, las reglas son las mismas, y sólo puede ganar el que escriba y envíe más rápidamente la palabra completa (de nuevo, así la misma ya haya sido descubierta).
 
 En la versión actual, ya se tiene implementado:
 
@@ -29,12 +29,15 @@ En la versión actual, ya se tiene implementado:
 
 ![](img/ClassDiagram.png)
 
-Por otro lado, 
+Por otro lado, tenga en cuenta:
 
-* En el STUB de persistencia (repositorio) provisto en, se cuenta con los usuarios identificados con 112233, 223344, 334455.
+* En el STUB de persistencia (repositorio) provisto, e inyectado a la lógica, se cuenta con los usuarios identificados con 112233, 223344, 334455.
 
+* En el STUB del caché de las partidas, se tienen ya creadas las partidas con los identificadores 1, 2, 3 y 4.
 
-1. Complete la funcionalidad del juego, siguiendo como especificación el siguiente diagrama de actividades. Tenga en cuenta que lo que está en azul ya está implementado, y que del diagrama se debe inferir qué estilos arquitectónicos se deben considerar en cada caso:
+Dado lo anterior:
+
+1. Complete la funcionalidad del juego, siguiendo como especificación el siguiente diagrama de actividades. Tenga en cuenta que lo que está en azul ya está implementado (por ahora el juego permite cargar la palabra sin antes haber consultado el jugador). De dicho diagrama inferir qué estilos arquitectónicos se deben considerar en cada caso:
 
 	![](img/ActivDiagram.png)
 
@@ -43,7 +46,7 @@ Por otro lado,
 	
 
 * Criterios de evaluación:
-	1. [10%] Corresponencia entre el diagrama de actividades y la implmentación, Nivel de madurez (Richardson) de los recursos REST.
+	1. [10%] Corresponencia entre el diagrama de actividades y la implmentación, Nivel de madurez (Richardson) de los recursos REST adicionados.
 	2. [20%] El juego consulta correctamente los detalles del cliente.
 	3. [40%] El juego permite UNA partida colaborativa.
 	4. [30%] El juego permite VARIAS partidas colaborativas, sin que unas interfieran con las otras.
