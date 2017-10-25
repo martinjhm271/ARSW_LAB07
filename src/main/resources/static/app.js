@@ -33,13 +33,8 @@ var app = (function () {
 
                 console.log('Connected: ' + frame);
 
-                stompClient.subscribe("/topic/wupdate." + gameid, function (data) {
-                    $("#palabra").html("<h1>" + data.body + "</h1>");
-                });
-
-                stompClient.subscribe("/topic/winner." + gameid, function (data) {
-                    $("#status").html("Estado: Terminado <br> Ganador: " + data.body);
-                });
+                //subscriptions
+            
             });
 
         },
