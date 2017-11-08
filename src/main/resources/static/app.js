@@ -52,7 +52,7 @@ var app = (function () {
             gameid = $("#gameid").val();
             var socket = new SockJS('/stompendpoint');
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function (frame) {
+            stompClient.connect("nzrqqtiq", "6Gb8MzCbluILuE1nZDstcra944gqz-YP",function (frame) {
 
                 console.log('Connected: ' + frame);
 
@@ -66,7 +66,7 @@ var app = (function () {
                     logout();
                 });
 
-            });
+            },"nzrqqtiq");
            app.loadWord(); 
         },
         sendLetter: function () {
