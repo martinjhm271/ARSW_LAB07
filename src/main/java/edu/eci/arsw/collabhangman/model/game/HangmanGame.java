@@ -16,6 +16,8 @@
  */
 package edu.eci.arsw.collabhangman.model.game;
 
+import edu.eci.arsw.collabhangman.services.GameServicesException;
+
 /**
  *
  * @author hcadavid
@@ -37,11 +39,12 @@ public class HangmanGame {
 
     
     /**
+     * @throws edu.eci.arsw.collabhangman.services.GameServicesException
      * @pre gameFinished==false
      * @param l new letter
      * @return the secret word with all the characters 'l' revealed
      */
-    public String addLetter(char l){                
+    public String addLetter(char l) throws GameServicesException{                
         for (int i=0;i<word.length();i++){
             if (word.charAt(i)==l){
                 guessedWord[i]=l;
@@ -50,7 +53,7 @@ public class HangmanGame {
         return new String(guessedWord);
     }
     
-    public synchronized boolean tryWord(String playerName,String s){
+    public synchronized boolean tryWord(String playerName,String s) throws GameServicesException{
         if (s.toLowerCase().equals(word)){
             winner=playerName;
             gameFinished=true;
@@ -60,19 +63,20 @@ public class HangmanGame {
         return false;
     }
     
-    public boolean gameFinished(){
+    public boolean gameFinished() throws GameServicesException{
         return gameFinished;
     }
     
     /**
+     * @throws edu.eci.arsw.collabhangman.services.GameServicesException
      * @pre gameFinished=true;
      * @return winner's name
      */
-    public String getWinnerName(){
+    public String getWinnerName() throws GameServicesException{
         return winner;
     }
     
-    public String getCurrentGuessedWord(){
+    public String getCurrentGuessedWord() throws GameServicesException{
         return new String(guessedWord);
     }    
     
