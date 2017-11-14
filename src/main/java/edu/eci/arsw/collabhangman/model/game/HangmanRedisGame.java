@@ -51,7 +51,7 @@ public class HangmanRedisGame extends HangmanGame {
             args[0] = letra;
             args[1] = value;
             args[2] = value2;
-            String value3=template.execute(script, Collections.singletonList("game:" + identificadorPartida), args);
+            String value3 = template.execute(script, Collections.singletonList("game:" + identificadorPartida), args);
             template.execute(new SessionCallback< List< Object>>() {
                 @SuppressWarnings("unchecked")
                 @Override
@@ -73,14 +73,25 @@ public class HangmanRedisGame extends HangmanGame {
         String value = (String) template.opsForHash().get("game:" + identificadorPartida, "word");
         if (value != null) {
             if (s.toLowerCase().equals(value)) {
-                template.opsForHash().put("game:" + identificadorPartida, "winner", playerName);
-                template.opsForHash().put("game:" + identificadorPartida, "state", "true");
-                template.opsForHash().put("game:" + identificadorPartida, "currentWord", value);
+                template.execute(new SessionCallback< List< Object>>() {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public < K, V> List<Object> execute(final RedisOperations< K, V> operations) throws DataAccessException {
+                        operations.watch((K) ("game:" + identificadorPartida + " currentWord"));
+                        operations.multi();
+                        template.opsForHash().put("game:" + identificadorPartida, "currentWord", value);
+                        template.opsForHash().put("game:" + identificadorPartida, "winner", playerName);
+                        template.opsForHash().put("game:" + identificadorPartida, "state", "true");
+                        return operations.exec();
+                    }
+                });
                 return true;
             }
+
         } else {
             throw new GameServicesException("No existe dicha partida!!");
         }
+
         return false;
     }
 
