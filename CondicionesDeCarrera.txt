@@ -1,0 +1,6 @@
+1-Actualizar datos en el servidor redis
+2-Obtener los datos del servidor redis
+
+Los metodos put y get del servidor redis actualmente 
+dejan realizar operaciones en cualquier momento y a cualquier cliente 
+sin importar la integridad de los datos.
