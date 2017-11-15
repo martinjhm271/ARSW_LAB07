@@ -1,6 +1,6 @@
 -- test.lua
-local current = ARGV[3]
-local word = ARGV[2]
+local current = redis.call("HGET",KEYS[1],"currentWord")
+local word = redis.call("HGET", KEYS[1],"word")
 
 for i = 1, #word do
     local c = word:sub(i,i)
@@ -10,4 +10,6 @@ for i = 1, #word do
     end
 end
 
-return current
+redis.call("HSET", KEYS[1],"currentWord", current)
+
+return "fin"

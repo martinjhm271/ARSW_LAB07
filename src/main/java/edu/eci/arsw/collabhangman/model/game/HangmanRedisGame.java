@@ -45,27 +45,23 @@ public class HangmanRedisGame extends HangmanGame {
     public String addLetter(char l) throws GameServicesException {
         String letra = String.valueOf(l);
         String value = (String) template.opsForHash().get("game:" + identificadorPartida, "word");
-        String value2 = (String) template.opsForHash().get("game:" + identificadorPartida, "currentWord");
         if (value != null) {
-            Object[] args = new Object[3];
+            Object[] args = new Object[1];
             args[0] = letra;
-            args[1] = value;
-            args[2] = value2;
             template.execute(new SessionCallback< List< Object>>() {
                 @SuppressWarnings("unchecked")
                 @Override
                 public < K, V> List<Object> execute(final RedisOperations< K, V> operations) throws DataAccessException {
                     operations.watch((K) ("game:" + identificadorPartida + " currentWord"));
                     operations.multi();
-                    String value3 = operations.execute(script, Collections.singletonList("game:" + identificadorPartida), args);
-                    operations.opsForHash().put("game:" + identificadorPartida, "currentWord", value3);
+                    operations.execute(script, Collections.singletonList((K)("game:"+identificadorPartida)), args);
                     return operations.exec();
                 }
             });
         } else {
             throw new GameServicesException("No existe dicha partida!!");
         }
-        return value;
+        return getCurrentGuessedWord();
     }
 
     @Override
@@ -79,9 +75,9 @@ public class HangmanRedisGame extends HangmanGame {
                     public < K, V> List<Object> execute(final RedisOperations< K, V> operations) throws DataAccessException {
                         operations.watch((K) ("game:" + identificadorPartida + " currentWord"));
                         operations.multi();
-                        operations.opsForHash().put("game:" + identificadorPartida, "currentWord", value);
-                        operations.opsForHash().put("game:" + identificadorPartida, "winner", playerName);
-                        operations.opsForHash().put("game:" + identificadorPartida, "state", "true");
+                        operations.opsForHash().put((K)("game:" + identificadorPartida), "currentWord", value);
+                        operations.opsForHash().put((K)("game:" + identificadorPartida), "winner", playerName);
+                        operations.opsForHash().put((K)("game:" + identificadorPartida), "state", "true");
                         return operations.exec();
                     }
                 });

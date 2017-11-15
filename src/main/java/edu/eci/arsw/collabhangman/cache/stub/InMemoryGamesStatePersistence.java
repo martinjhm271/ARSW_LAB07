@@ -70,5 +70,11 @@ public class InMemoryGamesStatePersistence implements GameStateCache{
         gamesState.put(3, new HangmanGame("player"));
         gamesState.put(4, new HangmanGame("winner"));        
     }
+
+    @Override
+    public void cleanCache(Integer gameid) {
+        String temp=gamesState.get(gameid).word;
+        gamesState.replace(gameid,new HangmanGame(temp));
+    }
     
 }

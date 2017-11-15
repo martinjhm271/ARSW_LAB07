@@ -145,6 +145,10 @@ public class GameServices {
     public String getGameWinner(int gameid) throws GameServicesException{
         return cache.getGame(gameid).getWinnerName();
     }
+
+    public void cleanCache(Integer gameid) {
+        cache.cleanCache(gameid);
+    }
     
   
     

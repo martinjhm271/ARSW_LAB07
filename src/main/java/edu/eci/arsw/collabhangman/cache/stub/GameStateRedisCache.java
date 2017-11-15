@@ -39,7 +39,6 @@ public class GameStateRedisCache implements GameStateCache {
             throw new GameCreationException("The game "+id+" already exist.");
         }
         else{
-            System.out.println("CREO NUEVO HAGMAN "+id+"  "+word);
             template.opsForHash().put("game:"+id,"word", word);
             String current="";
             for(int i=0;i<word.length();i++){current+="_";}
@@ -66,6 +65,16 @@ public class GameStateRedisCache implements GameStateCache {
 
     public void setTemplate(StringRedisTemplate template) {
         this.template = template;
+    }
+
+    @Override
+    public void cleanCache(Integer gameid) {
+        String value=(String)template.opsForHash().get("game:"+gameid, "word"); 
+        String current="";
+        for(int i=0;i<value.length();i++){current+="_";}
+        template.opsForHash().put("game:"+gameid,"currentWord",current);
+        template.opsForHash().put("game:"+gameid,"state","false");
+        template.opsForHash().put("game:"+gameid,"winner","");
     }
     
     
