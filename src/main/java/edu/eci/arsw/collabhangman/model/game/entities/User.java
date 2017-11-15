@@ -5,22 +5,32 @@
  */
 package edu.eci.arsw.collabhangman.model.game.entities;
 
+import java.util.LinkedList;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  *
  * @author hcadavid
  */
+
+@Document(collection = "User")
 public class User {
     
+    @Id
     private int id;
     
     private String name;
     
     private String photoUrl;
+    
+    private LinkedList<Score> scores;
 
-    public User(int id, String name, String photoUrl) {
+    public User(int id, String name, String photoUrl,LinkedList<Score> scores) {
         this.id = id;
         this.name = name;
         this.photoUrl = photoUrl;
+        this.scores=scores;
     }
 
     public User() {
@@ -48,6 +58,14 @@ public class User {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public LinkedList<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(LinkedList<Score> scores) {
+        this.scores = scores;
     }
     
     

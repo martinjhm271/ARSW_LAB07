@@ -8,6 +8,8 @@ package edu.eci.arsw.collabhangman.model.game;
 import edu.eci.arsw.collabhangman.services.GameServicesException;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
@@ -43,26 +45,45 @@ public class HangmanRedisGame extends HangmanGame {
      */
     @Override
     public String addLetter(char l) throws GameServicesException {
-        String letra = String.valueOf(l);
+        //String letra = String.valueOf(l);
         String value = (String) template.opsForHash().get("game:" + identificadorPartida, "word");
+        String value2 = (String) template.opsForHash().get("game:" + identificadorPartida, "currentWord");
+        char[] value3 = value2.toCharArray();
         if (value != null) {
-            Object[] args = new Object[1];
-            args[0] = letra;
-            template.execute(new SessionCallback< List< Object>>() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public < K, V> List<Object> execute(final RedisOperations< K, V> operations) throws DataAccessException {
-                    operations.watch((K) ("game:" + identificadorPartida + " currentWord"));
-                    operations.multi();
-                    operations.execute(script, Collections.singletonList((K)("game:"+identificadorPartida)), args);
-                    return operations.exec();
+            for (int i = 0; i < value.length(); i++) {
+                if (value.charAt(i) == l) {
+                    value3[i] = l;
                 }
+            }
+            value2=String.valueOf(value3);
+            template.opsForHash().put("game:" + identificadorPartida, "currentWord", value2);
+            /**
+             * Object[] args = new Object[1]; args[0] = letra;
+             * template.execute(new SessionCallback< List< Object>>() {
+             *
+             * @SuppressWarnings("unchecked")
+             * @Override public < K, V> List<Object> execute(final
+             * RedisOperations< K, V> operations) throws DataAccessException {
+             * operations.watch((K) ("game:" + identificadorPartida + "
+             * currentWord")); operations.multi();
+             *
+             * LOG.log(Level.INFO, ">>>>>>{0}", script); LOG.log(Level.INFO,
+             * ">>>>>>{0}",
+             * Collections.singletonList((K)("game:"+identificadorPartida)));
+             * LOG.log(Level.INFO, ">>>>>>{0}", args);
+             *
+             * operations.execute(script,
+             * Collections.singletonList((K)("game:"+identificadorPartida)),
+             * args); return operations.exec(); }
             });
+             */
         } else {
             throw new GameServicesException("No existe dicha partida!!");
         }
         return getCurrentGuessedWord();
     }
+
+    static final Logger LOG = Logger.getLogger(HangmanRedisGame.class.getName());
 
     @Override
     public synchronized boolean tryWord(String playerName, String s) throws GameServicesException {
@@ -75,9 +96,9 @@ public class HangmanRedisGame extends HangmanGame {
                     public < K, V> List<Object> execute(final RedisOperations< K, V> operations) throws DataAccessException {
                         operations.watch((K) ("game:" + identificadorPartida + " currentWord"));
                         operations.multi();
-                        operations.opsForHash().put((K)("game:" + identificadorPartida), "currentWord", value);
-                        operations.opsForHash().put((K)("game:" + identificadorPartida), "winner", playerName);
-                        operations.opsForHash().put((K)("game:" + identificadorPartida), "state", "true");
+                        operations.opsForHash().put((K) ("game:" + identificadorPartida), "currentWord", value);
+                        operations.opsForHash().put((K) ("game:" + identificadorPartida), "winner", playerName);
+                        operations.opsForHash().put((K) ("game:" + identificadorPartida), "state", "true");
                         return operations.exec();
                     }
                 });
