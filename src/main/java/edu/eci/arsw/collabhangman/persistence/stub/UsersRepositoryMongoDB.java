@@ -8,6 +8,8 @@ package edu.eci.arsw.collabhangman.persistence.stub;
 import edu.eci.arsw.collabhangman.model.game.entities.User;
 import edu.eci.arsw.collabhangman.persistence.PersistenceException;
 import edu.eci.arsw.collabhangman.persistence.UsersRepository;
+import java.util.Set;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,4 +27,16 @@ public abstract class UsersRepositoryMongoDB implements UsersRepository{
      */
     @Override
     public abstract User findById(Integer id) throws PersistenceException;
+    
+    
+    /**
+     *
+     * @param puntaje
+     * @return
+     * @throws edu.eci.arsw.collabhangman.persistence.PersistenceException
+     */
+    
+    @Override
+    public abstract Set<User> getAllUsers(Integer puntaje) throws PersistenceException;
+    
 }

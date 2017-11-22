@@ -61,8 +61,12 @@ public class GameServices {
         }
     }
     
-    public Set<User> getAllUsers(){
-        return null;
+    public Set<User> getAllUsers() throws GameServicesException{
+        try {
+            return usersRepository.getAllUsers(100);
+        } catch (PersistenceException ex) {
+            throw new GameServicesException("Error loading User Data:"+ex.getLocalizedMessage(),ex);
+        }
     }
     
     /**

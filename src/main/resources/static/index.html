@@ -33,8 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     <body>
         <h1 class="title">AHORCADO MULTIJUGADOR</h1>
-
-        <div class="centeredinput">
+        
+        <div style="width: 40%; float:left">
+            <div class="centeredinput">
             Identificador del jugador: <input id="playerid" type="text"/><br>
             <button onclick="app.getUser()">Consultar datos jugador</button>
         </div>
@@ -82,6 +83,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <div class="box">
             Adivinar palabra!: <input id="adivina" type="text"/>
             <button id="badivina" onclick="app.sendWord()">Enviar palabra</button>
+        </div>
+            
+        </div>
+        
+        <div style="width: 60%; float:right">
+            <p><strong>Users with Scores greater than 100 points.</strong></p>
+            <table id="table1"  style="width:100%">
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th> 
+                        <th>Scores</th> 
+                    </tr>
+                </table>
         </div>
         
         

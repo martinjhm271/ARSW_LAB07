@@ -35,9 +35,17 @@ public class UsersResourceController {
     @Autowired
     SimpMessagingTemplate msmt;
     
+
+    
     @RequestMapping(method = RequestMethod.GET)
-    public String test(){
-        return "Ok";
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            //obtener datos que se enviarán a través del API
+            return new ResponseEntity<>(gameServices.getAllUsers(), HttpStatus.ACCEPTED);
+        } catch (GameServicesException  ex) {
+            Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping(path="/{userid}",method = RequestMethod.GET)
@@ -45,10 +53,12 @@ public class UsersResourceController {
         try {
             //obtener datos que se enviarán a través del API
             return new ResponseEntity<>(gameServices.loadUserData(userid), HttpStatus.ACCEPTED);
-        } catch (Exception  ex) {
+        } catch (GameServicesException  ex) {
             Logger.getLogger(UsersResourceController.class.getName()).log(Level.SEVERE, null, ex);
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    
+    
 
 }

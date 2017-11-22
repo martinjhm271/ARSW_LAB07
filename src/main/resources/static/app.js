@@ -10,7 +10,7 @@ var app = (function () {
         
         var getPromise = $.get("/users/" + document.getElementById("playerid").value,
             function (data) {
-                var info = "<div>" + "<img id=imagenjugador " + "src=" + data.photoUrl + " />" + "</div>" + "<div>" + "Nombre:" + data.name + "</div>";
+                var info = "<div>" + "<img id=imagenjugador " + "src=" + data.photoUrl + " />" + "</div>" + "<div>" + "Nombre:" + data.name + "</div>" + "<div>" + "Ultimo Puntaje:" + data.scores[data.scores.length-1].puntaje + "</div>";
                 document.getElementById("datosjugador").innerHTML = info;
                 nombreJugador = data.name;
             }
@@ -21,6 +21,33 @@ var app = (function () {
             console.info("usuario no cargado con exito");
         });
     }
+    
+    
+    var getAllUser = function () {
+        
+        var getPromise = $.get("/users",
+            function (data) {
+                $("#table1").find("tr:gt(0)").remove();
+                anadir = function (objeto) {
+                    $(document).ready(function () {
+                        puntaje="";
+                        for(var i=0;i<objeto.scores.length;i++){
+                            puntaje+="Fecha:  " +objeto.scores[i].fechaObtencionPuntaje+" Puntaje: " + objeto.scores[i].puntaje+ "\n";
+                        }
+                        $('#table1').append("<tr> <th>" + "<img id=imagenjugador " + "src=" + objeto.photoUrl + " />" + "</th> <th>" + objeto.name + "</th> <th>" + puntaje + "</th> </tr>");
+                    });
+                };
+                data.map(anadir);
+            }
+        );
+        getPromise.then(function () {
+            console.info("usuarios cargados con exito");
+        }, function () {
+            console.info("usuarios no cargados con exito");
+        });
+        return getPromise;
+    }
+    
     
     var logout=function(){
         if(stompClient!==null){stompClient.disconnect();}
@@ -112,6 +139,7 @@ var app = (function () {
         },
         getUser: function () {
             getUser();
+            getAllUser();
         }
         
        
